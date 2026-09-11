@@ -15,19 +15,19 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_subnet" "this" {
-  vpc_id = aws_vpc.this.id
-  for_each = var.subnet_config
+  vpc_id            = aws_vpc.this.id
+  for_each          = var.subnet_config
   availability_zone = each.value.az
-  cidr_block = each.value.cidr_block
+  cidr_block        = each.value.cidr_block
 
   tags = {
-    Name = each.key
+    Name   = each.key
     Access = each.value.public ? "Public" : "Private"
   }
 
   lifecycle {
     precondition {
-      condition = contains(local.selected_azs, each.value.az)
+      condition     = contains(local.selected_azs, each.value.az)
       error_message = <<-EOT
       The AZ "${each.value.az}" provided for the subnet "${each.key}" is invalid.
 
