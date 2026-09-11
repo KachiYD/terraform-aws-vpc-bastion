@@ -13,3 +13,15 @@ resource "aws_vpc" "this" {
     Name = var.vpc_config.name
   }
 }
+
+resource "aws_subnet" "this" {
+  vpc_id = aws_vpc.this.id
+  for_each = var.subnet_config
+  availability_zone = each.value.az
+  cidr_block = each.value.cidr_block
+
+  tags = {
+    Name = each.key
+    Access = each.value.public ? "Public" : "Private"
+  }
+}
