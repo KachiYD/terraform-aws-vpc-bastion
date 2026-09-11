@@ -24,4 +24,16 @@ resource "aws_subnet" "this" {
     Name = each.key
     Access = each.value.public ? "Public" : "Private"
   }
+
+  lifecycle {
+    precondition {
+      condition = contains(selected_azs, each.value.az)
+      error_message = <<-EOT
+      The AZ "${each.value.az}" provided for the subnet "${each.key}" is invalid.
+
+      The following (2) AZs will be used for this configuration:
+      [${join(", ", selected_azs)}]
+      EOT
+    }
+  }
 }
