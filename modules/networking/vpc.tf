@@ -27,12 +27,12 @@ resource "aws_subnet" "this" {
 
   lifecycle {
     precondition {
-      condition = contains(selected_azs, each.value.az)
+      condition = contains(local.selected_azs, each.value.az)
       error_message = <<-EOT
       The AZ "${each.value.az}" provided for the subnet "${each.key}" is invalid.
 
       The following (2) AZs will be used for this configuration:
-      [${join(", ", selected_azs)}]
+      [${join(", ", local.selected_azs)}]
       EOT
     }
   }
