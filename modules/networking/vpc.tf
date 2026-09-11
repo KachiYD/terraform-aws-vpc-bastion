@@ -7,9 +7,9 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_vpc" "this" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.vpc_config.cidr_block
 
   tags = {
-    Name = "Main VPC"
+    Name = var.vpc_config.name
   }
 }
