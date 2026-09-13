@@ -101,11 +101,19 @@ resource "aws_eip" "elastic_ip" {
 resource "aws_nat_gateway" "this" {
   allocation_id = aws_eip.elastic_ip.id
 
-  for_each = local.public_subnets
+  # for_each = local.public_subnets
 
-  subnet_id = aws_subnet.this[each.key].id
+  subnet_id = aws_subnet.this[keys(local.public_subnets)[0]].id
 
   tags = {
     Name = "Main NAT Gateway"
   }
+}
+
+resource "aws_route" "nat_gateway_route" {
+  route_table_id = aws_route_table.private_rtb[0].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = aws_nat_gateway.this.id
+
+  depends_on = [ aws_eip.elastic_ip ]
 }
