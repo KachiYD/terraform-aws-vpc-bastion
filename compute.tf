@@ -19,7 +19,7 @@ resource "aws_instance" "bastion-host" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t3.micro"
   associate_public_ip_address = true
-  subnet_id                   = module.vpc.public_subnet_id
+  subnet_id                   = module.vpc.public_subnet_ids[0]
 
   tags = {
     Name = "Bastion Host"
