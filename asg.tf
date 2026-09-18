@@ -1,24 +1,7 @@
-data "aws_ami" "ubuntu" {
-
-  most_recent = true
-  owners      = ["099720109477"] # Owner is Canonical
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-*-22.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-}
-
 resource "aws_security_group" "app" {
   name_prefix = "private-app-"
   description = "Application traffic in and out of the private app instances"
-  vpc_id      = aws_vpc.this.id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     Name = "private_app_sg"
@@ -75,7 +58,7 @@ resource "aws_launch_template" "this" {
 
 resource "aws_autoscaling_group" "this" {
   name                = "private_apps_asg"
-  vpc_zone_identifier = [for key, config in local.private_subnets : aws_subnet.this[key].id]
+  vpc_zone_identifier = module.vpc.private_subnet_ids
 
   min_size         = 1
   max_size         = 4
