@@ -105,6 +105,8 @@ resource "aws_nat_gateway" "this" {
 
   subnet_id = aws_subnet.this[keys(local.public_subnets)[0]].id
 
+  depends_on = [ aws_internet_gateway.this ]
+
   tags = {
     Name = "Main NAT Gateway"
   }
@@ -115,5 +117,5 @@ resource "aws_route" "nat_gateway_route" {
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.this.id
 
-  depends_on = [aws_eip.elastic_ip]
+  #depends_on = [aws_eip.elastic_ip]
 }
