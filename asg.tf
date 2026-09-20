@@ -57,10 +57,10 @@ resource "aws_launch_template" "this" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name                = "private_apps_asg"
+  name_prefix               = "private_apps_asg-"
   vpc_zone_identifier = module.vpc.private_subnet_ids
 
-  min_size         = 1
+  min_size         = 2
   max_size         = 4
   desired_capacity = 2
 
