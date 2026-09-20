@@ -57,16 +57,26 @@ resource "aws_launch_template" "this" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name_prefix               = "private_apps_asg-"
+  name_prefix               = "private_apps_asg_"
   vpc_zone_identifier = module.vpc.private_subnet_ids
 
   min_size         = 2
-  max_size         = 4
+  max_size         = 2
   desired_capacity = 2
+
+  health_check_type = "EC2"
+  health_check_grace_period = 300
 
   launch_template {
     id      = aws_launch_template.this.id
     version = "$Latest"
+  }
+
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
   }
 
   lifecycle {
