@@ -20,6 +20,12 @@ resource "aws_instance" "bastion-host" {
   instance_type               = "t3.micro"
   associate_public_ip_address = true
   subnet_id                   = module.vpc.public_subnet_ids[0]
+  key_name = aws_key_pair.bastion.key_name
+  vpc_security_group_ids = [aws_security_group.bastion.id]
+
+  metadata_options {
+    http_tokens = "required"
+  }
 
   tags = {
     Name = "Bastion Host"
