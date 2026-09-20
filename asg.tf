@@ -15,7 +15,7 @@ resource "aws_security_group" "app" {
 resource "aws_vpc_security_group_ingress_rule" "app_ssh" {
   security_group_id = aws_security_group.app.id
   description       = "SSH from bastion"
-  cidr_ipv4         = "0.0.0.0/0"
+  referenced_security_group_id = aws_security_group.bastion.id
   from_port         = 22
   to_port           = 22
   ip_protocol       = "tcp"
@@ -24,7 +24,7 @@ resource "aws_vpc_security_group_ingress_rule" "app_ssh" {
 resource "aws_vpc_security_group_ingress_rule" "app_traffic" {
   security_group_id = aws_security_group.app.id
   description       = "Incoming app traffic"
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = module.vpc.vpc_cidr_block
   from_port         = 8000
   to_port           = 8000
   ip_protocol       = "tcp"
