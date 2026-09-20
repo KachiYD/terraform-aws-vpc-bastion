@@ -20,8 +20,8 @@ resource "aws_instance" "bastion-host" {
   instance_type               = "t3.micro"
   associate_public_ip_address = true
   subnet_id                   = module.vpc.public_subnet_ids[0]
-  key_name = aws_key_pair.bastion.key_name
-  vpc_security_group_ids = [aws_security_group.bastion.id]
+  key_name                    = aws_key_pair.bastion.key_name
+  vpc_security_group_ids      = [aws_security_group.bastion.id]
 
   metadata_options {
     http_tokens = "required"
@@ -38,7 +38,7 @@ resource "aws_instance" "bastion-host" {
 
 resource "aws_key_pair" "bastion" {
   key_name_prefix = "bastion-"
-  public_key = file(pathexpand(var.public_key_path))
+  public_key      = file(pathexpand(var.public_key_path))
 
   lifecycle {
     create_before_destroy = true
@@ -48,7 +48,7 @@ resource "aws_key_pair" "bastion" {
 resource "aws_security_group" "bastion" {
   name_prefix = "bastion-"
   description = "Bastion host SSH access"
-  vpc_id = module.vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     Name = "bastion-sg"
@@ -61,16 +61,16 @@ resource "aws_security_group" "bastion" {
 
 resource "aws_vpc_security_group_ingress_rule" "bastion_ssh" {
   security_group_id = aws_security_group.bastion.id
-  description = "SSH from workstation"
-  cidr_ipv4 = var.my_ip_cidr
-  from_port = 22
-  to_port = 22
-  ip_protocol = "tcp"
+  description       = "SSH from workstation"
+  cidr_ipv4         = var.my_ip_cidr
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
 }
 
 resource "aws_vpc_security_group_egress_rule" "bastion_all" {
   security_group_id = aws_security_group.bastion.id
-  description = "All outbound"
-  cidr_ipv4 = "0.0.0.0/0"
-  ip_protocol = "-1"
+  description       = "All outbound"
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
 }

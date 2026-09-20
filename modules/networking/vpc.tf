@@ -105,7 +105,7 @@ resource "aws_nat_gateway" "this" {
 
   subnet_id = aws_subnet.this[keys(local.public_subnets)[0]].id
 
-  depends_on = [ aws_internet_gateway.this ]
+  depends_on = [aws_internet_gateway.this]
 
   tags = {
     Name = "Main NAT Gateway"
