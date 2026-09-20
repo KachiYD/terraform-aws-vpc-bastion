@@ -13,12 +13,12 @@ resource "aws_security_group" "app" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "app_ssh" {
-  security_group_id = aws_security_group.app.id
-  description       = "SSH from bastion"
+  security_group_id            = aws_security_group.app.id
+  description                  = "SSH from bastion"
   referenced_security_group_id = aws_security_group.bastion.id
-  from_port         = 22
-  to_port           = 22
-  ip_protocol       = "tcp"
+  from_port                    = 22
+  to_port                      = 22
+  ip_protocol                  = "tcp"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "app_traffic" {
@@ -57,14 +57,14 @@ resource "aws_launch_template" "this" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name_prefix               = "private_apps_asg_"
+  name_prefix         = "private_apps_asg_"
   vpc_zone_identifier = module.vpc.private_subnet_ids
 
   min_size         = 2
   max_size         = 2
   desired_capacity = 2
 
-  health_check_type = "EC2"
+  health_check_type         = "EC2"
   health_check_grace_period = 300
 
   launch_template {
