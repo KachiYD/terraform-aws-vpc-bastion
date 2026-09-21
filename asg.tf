@@ -43,6 +43,7 @@ resource "aws_launch_template" "this" {
   instance_type = "t3.micro"
 
   vpc_security_group_ids = [aws_security_group.app.id]
+  key_name = aws_key_pair.bastion.key_name
 
   tag_specifications {
     resource_type = "instance"
