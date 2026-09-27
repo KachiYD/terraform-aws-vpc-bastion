@@ -1,5 +1,5 @@
 resource "aws_lb" "load_balancer" {
-    name_prefix = "load_balancer_"
+    name_prefix = "lb-"
     load_balancer_type = "application"
     subnets = module.vpc.public_subnet_ids
     security_groups = [aws_security_group.app.id]
@@ -8,7 +8,7 @@ resource "aws_lb" "load_balancer" {
 }
 
 resource "aws_lb_target_group" "target" {
-  name_prefix = "target_group_"
+  name_prefix = "tg-"
   port = 8000
   protocol = "HTTP"
   vpc_id = module.vpc.vpc_id
