@@ -2,7 +2,7 @@ resource "aws_lb" "load_balancer" {
     name_prefix = "lb-"
     load_balancer_type = "application"
     subnets = module.vpc.public_subnet_ids
-    security_groups = [aws_security_group.app.id]
+    security_groups = [aws_security_group.alb.id]
 
     #enable_deletion_protection = true 
 }
@@ -50,7 +50,7 @@ resource "aws_security_group" "alb" {
 
 resource "aws_vpc_security_group_ingress_rule" "alb_http" {
   security_group_id = aws_security_group.alb.id
-  description       = "HTTP from internet"
+  description       = "HTTP from the internet"
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 80
   to_port           = 80
@@ -59,7 +59,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_http" {
 
 resource "aws_vpc_security_group_egress_rule" "alb_all" {
   security_group_id = aws_security_group.alb.id
-  description       = "All outbound"
+  description       = "All outbound traffic"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"
 }
