@@ -33,3 +33,33 @@ resource "aws_lb_listener" "http" {
     target_group_arn = aws_lb_target_group.target.arn
   }
 }
+
+resource "aws_security_group" "alb" {
+  name_prefix = "alb-"
+  description = "Public ALB security group"
+  vpc_id      = module.vpc.vpc_id
+
+  tags = {
+    Name = "alb-sg"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "alb_http" {
+  security_group_id = aws_security_group.alb.id
+  description       = "HTTP from internet"
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "alb_all" {
+  security_group_id = aws_security_group.alb.id
+  description       = "All outbound"
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
