@@ -22,12 +22,12 @@ resource "aws_vpc_security_group_ingress_rule" "app_ssh" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "app_traffic" {
-  security_group_id = aws_security_group.app.id
-  description       = "Incoming app traffic"
+  security_group_id            = aws_security_group.app.id
+  description                  = "Incoming app traffic"
   referenced_security_group_id = aws_security_group.alb.id
-  from_port         = 8000
-  to_port           = 8000
-  ip_protocol       = "tcp"
+  from_port                    = 8000
+  to_port                      = 8000
+  ip_protocol                  = "tcp"
 }
 
 resource "aws_vpc_security_group_egress_rule" "app_all" {
@@ -43,7 +43,7 @@ resource "aws_launch_template" "this" {
   instance_type = "t3.micro"
 
   vpc_security_group_ids = [aws_security_group.app.id]
-  key_name = aws_key_pair.bastion.key_name
+  key_name               = aws_key_pair.bastion.key_name
 
   tag_specifications {
     resource_type = "instance"
