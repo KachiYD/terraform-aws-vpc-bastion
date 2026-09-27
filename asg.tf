@@ -65,8 +65,10 @@ resource "aws_autoscaling_group" "this" {
   max_size         = 2
   desired_capacity = 2
 
-  health_check_type         = "EC2"
+  health_check_type         = "ELB" #"EC2"
   health_check_grace_period = 300
+
+  target_group_arns = [aws_lb_target_group.target.arn]
 
   launch_template {
     id      = aws_launch_template.this.id
