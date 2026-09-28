@@ -19,3 +19,50 @@ A Terraform build of a production-style AWS network foundation: a multi-AZ VPC w
 - An SSH key pair for bastion access:
   ```bash
   ssh-keygen -t ed25519 -f ~/.ssh/tf-bastion
+  ```
+
+## Setup
+
+1. Clone the repo and copy the example variables file:
+   ```bash
+   cp terraform.tfvars.example local.auto.tfvars
+   ```
+2. Edit `local.auto.tfvars` with your public IP and SSH key path (see comments in the file).
+3. Initialize and deploy:
+   ```bash
+   terraform init
+   terraform plan
+   terraform apply
+   ```
+4. Grab the outputs:
+   ```bash
+   terraform output
+   ```
+
+## Testing the application
+
+Open the ALB's DNS name in a browser or with curl:
+
+```bash
+curl http://$(terraform output -raw alb_dns_name)
+```
+
+## Accessing private instances via SSH
+
+```bash
+ssh-add ~/.ssh/tf-bastion
+ssh -A ubuntu@$(terraform output -raw bastion_public_ip)
+
+# from inside the bastion, agent forwarding lets you jump straight in:
+ssh ubuntu@<private-instance-ip>
+```
+
+## Cleaning up
+
+```bash
+terraform destroy
+```
+
+## License
+
+MIT — see [LICENSE](./LICENSE)
