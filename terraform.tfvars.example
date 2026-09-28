@@ -1,0 +1,11 @@
+# Copy this file to a *.auto.tfvars (e.g. local.auto.tfvars) and fill in your own values.
+# Terraform only auto-loads *.auto.tfvars / terraform.tfvars — this .example file is
+# never read directly, and your real copy is already excluded via .gitignore.
+
+# Your workstation's public IP in CIDR notation — restricts bastion SSH access to just you.
+# Find yours with: curl -s ifconfig.me
+my_ip_cidr = "203.0.114.44/32"
+
+# Path to the SSH public key used to access the bastion host.
+# Generate one with: ssh-keygen -t ed25519 -f ~/.ssh/tf-bastion
+public_key_path = "~/.ssh/tf-bastion.pub"
