@@ -4,7 +4,7 @@ A Terraform build of a production-style AWS network foundation: a multi-AZ VPC w
 
 ## Architecture
 
-![Architecture Diagram](./architecture-diagram.png)
+![Architecture Diagram](./images/architecture-diagram.png)
 
 - A VPC spans two Availability Zones, each with a public and a private subnet.
 - The **Application Load Balancer** sits in both public subnets and is the only way application traffic reaches the private instances.
