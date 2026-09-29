@@ -45,6 +45,8 @@ resource "aws_launch_template" "this" {
   vpc_security_group_ids = [aws_security_group.app.id]
   key_name               = aws_key_pair.bastion.key_name
 
+  user_data = base64encode(file("${path.module}/scripts/app-setup.sh"))
+
   tag_specifications {
     resource_type = "instance"
     tags = {
